@@ -130,6 +130,6 @@ plt.xlabel("Horizontal Position")
 plt.ylabel("Vertical Position")
 plt.title("2D Cluster Growth Using the DLA Model")
 plt.legend()
-plt.save("C:/Users/doets/Desktop/project2A/_2DCluster.png")
+plt.savefig("C:/Users/doets/Desktop/project2A/_2DCluster.png")
 plt.show()
 
