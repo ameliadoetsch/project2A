@@ -58,44 +58,45 @@ def location_check_pick(twoD_array, max_size, x, y):
         direction.remove('left')
 
     length = len(direction)
-    rand_loc = random.randint(0, length)
+    rand_loc = random.randint(0, length-1)
 
     if length == 0:
         new_row = x
         new_col = y
     else:
         if direction[rand_loc] == 'up':
-            if (x-1 < 0):
-                new_row = max_size -1
+            if ((x-1) < 0):
+                new_row = max_size - 1
             else:
                 new_row = x - 1
             new_col = y
         elif direction[rand_loc] == 'right':
             new_row = x
-            if (y + 1 > max_size - 1):
+            if ((y + 1) > (max_size - 1)):
                 new_col = 0
             else:
                 new_col = y + 1
         elif direction[rand_loc] == 'down':
-            if (x + 1 > max_size -1):
+            if ((x + 1) > (max_size -1)):
                 new_row = 0
             else:
                 new_row = x + 1
             new_col = y
         elif direction[rand_loc] == 'left':
             new_row = x
-            if (y -1 < 0):
+            if ((y -1) < 0):
                 new_col = max_size -1
             else:
                 new_col = y - 1
+
     return new_row, new_col
 
-pop_seed(fish_positions, 2)
+pop_seed(fish_positions, 5)
 
-for row in fish_positions:
-    print(row)
-
-print('')
+# for row in fish_positions:
+#     print(row)
+#
+# print('')
 
 pot_change = 0
 
