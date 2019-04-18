@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 #parameter controls
 grid_size = 20     #Size of grid
-fish_breed = 20    #Fish breeding age
-shark_breed = 20   #Shark breeding age
+fish_breed = 8    #Fish breeding age
+shark_breed = 5   #Shark breeding age
 starve_age = 7    #Shark starvation age
 fish_start = 20   #Starting population of fish
 shark_start = 10  #Starting population of sharks
