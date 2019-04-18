@@ -3,15 +3,22 @@ import random as random
 import matplotlib.pyplot as plt
 
 #parameter controls
-grid_size = 5
-fish_breed = 3
+grid_size = 20     #Size of grid
+fish_breed = 20    #Fish breeding age
+shark_breed = 20   #Shark breeding age
+starve_age = 7    #Shark starvation age
+fish_start = 20   #Starting population of fish
+shark_start = 10  #Starting population of sharks
+n = 50           #Number of time steps
 
-#declare arrays
+
+#declare variables
 fish_positions = [[-1 for j in range(grid_size)] for i in range(grid_size)]
 shark_positions = [[-1 for j in range(grid_size)] for i in range(grid_size)]
-shark_starve = [[0 for j in range(grid_size)] for i in range(grid_size)]
+shark_starve = [[-1 for j in range(grid_size)] for i in range(grid_size)]
 iter_array =  np.arange(0, grid_size, 1)
-time_steps = np.arange(0, 5, 1)
+time_steps = np.arange(0, n, 1)
+
 
 
 #Function to seed intial populations
@@ -57,7 +64,10 @@ def location_check_pick(twoD_array, max_size, x, y):
         direction.remove('left')
 
     length = len(direction)
-    rand_loc = random.randint(0, length-1)
+    if length > 1:
+        rand_loc = random.randint(0, length - 1)
+    elif length == 1:
+        rand_loc = 0
 
     if length == 0:
         new_row = x
@@ -119,7 +129,10 @@ def hunt_location_check_pick(twoD_array, max_size, x, y):
         direction.append('left')
 
     length = len(direction)
-    rand_loc = random.randint(0, length-1)
+    if length > 1:
+        rand_loc = random.randint(0, length-1)
+    elif length == 1:
+        rand_loc = 0
 
     if length == 0:
         new_row = x
@@ -158,16 +171,24 @@ def hunt_location_check_pick(twoD_array, max_size, x, y):
 
 
 
-pop_seed(fish_positions, 3)
-pop_seed(shark_positions, 1)
+pop_seed(fish_positions, fish_start)
+pop_seed(shark_positions, shark_start)
 
-for row in fish_positions:
-    print(row)
-
-print('')
+fish_pop = []
+shark_pop = []
 
 
 for t in time_steps:
+    fish = 0
+    sharks = 0
+    for i in iter_array:
+        for j in iter_array:
+            if fish_positions[i][j] >= 0:
+                fish = fish + 1
+            if shark_positions[i][j] >= 0:
+                sharks =  sharks + 1
+    fish_pop.append(fish)
+    shark_pop.append(sharks)
     fish_move = [[0 for j in range(grid_size)] for i in range(grid_size)]
     shark_move = [[0 for j in range(grid_size)] for i in range(grid_size)]
     for i in iter_array:
@@ -198,23 +219,49 @@ for t in time_steps:
         for j in iter_array:
             if shark_positions[i][j] >= 0:
                 if shark_move[i][j] == 0:
-                    s_move_i, s_move_j = hunt_location_check_pick(fish_positions, grid_size, i, j)
-                    if s_move_i == i and s_move_j == j:
-                        mv_shark_i, mv_shark_j = location_check_pick(shark_positions, grid_size, i, j)
-                        if mv_shark_i == i and mv_shark_j == j:
-                            shark_positions[mv_shark_i][mv_shark_j] = shark_positions[i][j] + 1
-                            shark_move[mv_shark_i][mv_shark_j] = 1
-                        else:
-                            shark_positions[mv_shark_i][mv_shark_j] = shark_positions[i][j] + 1
-                            shark_move[mv_shark_i][mv_shark_j] = 1
-                            shark_positions[i][j] = -1
-                    else:
-                        shark_positions[s_move_i][s_move_j] = shark_positions[i][j] + 1
+                    if shark_starve[i][j] == starve_age:
                         shark_positions[i][j] = -1
-                        shark_move[s_move_i][s_move_j] = 1
-                        fish_positions[s_move_i][s_move_j] = -1
+                        shark_starve[i][j] = -1
+                    else:
+                        s_move_i, s_move_j = hunt_location_check_pick(fish_positions, grid_size, i, j)
+                        if s_move_i == i and s_move_j == j:
+                            mv_shark_i, mv_shark_j = location_check_pick(shark_positions, grid_size, i, j)
+                            if mv_shark_i == i and mv_shark_j == j:
+                                if shark_positions[i][j] == shark_breed:
+                                    shark_positions[mv_shark_i][mv_shark_j] = 0
+                                    shark_move[mv_shark_i][mv_shark_j] = 1
+                                    shark_starve[mv_shark_i][mv_shark_j] = 0
+                                else:
+                                    shark_positions[mv_shark_i][mv_shark_j] = shark_positions[i][j] + 1
+                                    shark_move[mv_shark_i][mv_shark_j] = 1
+                                    shark_starve[mv_shark_i][mv_shark_j] = shark_starve[i][j] + 1
+                            else:
+                                if shark_positions[i][j] == shark_breed:
+                                    shark_positions[mv_shark_i][mv_shark_j] = 0
+                                    shark_move[mv_shark_i][mv_shark_j] = 1
+                                    shark_positions[i][j] = 0
+                                    shark_starve[mv_shark_i][mv_shark_j] = shark_starve[i][j] + 1
+                                    shark_starve[i][j] = 0
+                                else:
+                                    shark_positions[mv_shark_i][mv_shark_j] = shark_positions[i][j] + 1
+                                    shark_move[mv_shark_i][mv_shark_j] = 1
+                                    shark_positions[i][j] = -1
+                                    shark_starve[mv_shark_i][mv_shark_j] = shark_starve[i][j] + 1
+                                    shark_starve[i][j] = -1
+                        else:
+                            shark_positions[s_move_i][s_move_j] = shark_positions[i][j] + 1
+                            shark_positions[i][j] = -1
+                            shark_move[s_move_i][s_move_j] = 1
+                            fish_positions[s_move_i][s_move_j] = -1
+                            shark_starve[s_move_i][s_move_j] = 0
+                            shark_starve[i][j] = -1
 
 
-    for row in fish_positions:
-        print(row)
-    print('')
+
+plt.plot(time_steps, fish_pop, label='Fish', color='r', ls='-')
+plt.plot(time_steps, shark_pop, label='Sharks', color='b', ls='-.')
+plt.legend()
+plt.xlabel('Time Steps')
+plt.ylabel('Population (#)')
+plt.title('Predator-Prey Model')
+plt.show()
