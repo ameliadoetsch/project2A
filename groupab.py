@@ -132,11 +132,11 @@ for simulation_num in range(1, 11): # perform 10 plots
                 y.append(j)
 
     plt.scatter(x, y, label="Cluster Particles")
-    plt.xlabel("Horizontal Position")
+    plt.xlabel("Ho-rizontal Position")
     plt.ylabel("Vertical Position")
     plt.title("2D Cluster Growth Using the DLA Model")
     plt.legend()
-    plt.savefig(str(simulation_num) + "_2DCluster.png")
+    plt.savefig(str(simulation_num) + "cluster.png")
     plt.show()
 
     to_plotr = []
