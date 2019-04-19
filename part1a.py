@@ -74,7 +74,7 @@ while isSize is False:
         elif lattice[x_old][y_old + 1] == 1:
             lattice[x_old][y_old] = 1
             mass += 1
-            mass.append(mass_list)
+            mass_list.append(mass)
             isAdded = True
         elif lattice[x_old][y_old - 1] == 1:
             lattice[x_old][y_old] = 1
@@ -84,21 +84,11 @@ while isSize is False:
         else:
             lattice[x_old][y_old] = -1
 
-    if isAdded is True:
-        max_radius = 0
-        for i in range(250):
-            for j in range(250):
-                if lattice[i][j] == 1:
-                    radius = np.sqrt((125 - i) ** 2 + (125 - j) ** 2)
-                    if radius > max_radius:
-                        max_radius = radius
-        radius_list.append(max_radius)
-
     while isAdded is False:
         point = random_walk(point)
         x_new = point[0]
         y_new = point[1]
-        if np.sqrt((x_new - 100) ** 2 + (y_new - 100) ** 2) > 101:
+        if np.sqrt((x_new - 125) ** 2 + (y_new - 125) ** 2) > 101:
             escape = True
             lattice[x_new][y_new] = 0
             break
@@ -134,18 +124,17 @@ while isSize is False:
                 x_old = x_new
                 y_old = y_new
 
-    max_radius = 0
-    for i in range(250):
-        for j in range(250):
-            if lattice[i][j] == 1:
-                radius = np.sqrt((125 - i) ** 2 + (125 - j) ** 2)
-                if radius > max_radius:
-                    max_radius = radius
-
-    radius_list.append(max_radius)
-
     # check is desired size is achieved
     if escape is False:
+        max_radius = 0
+        for i in range(250):
+            for j in range(250):
+                if lattice[i][j] == 1:
+                    radius = np.sqrt((125 - i) ** 2 + (125 - j) ** 2)
+                    if radius > max_radius:
+                        max_radius = radius
+        radius_list.append(max_radius)
+
         for m in range(elements_in_circle):
             x = (circle[m])[0]
             y = (circle[m])[1]
@@ -173,7 +162,7 @@ plt.savefig("C:/Users/doets/Desktop/project2A/_2DCluster.png")
 plt.show()
 
 plt.figure(2)
-plt.scatter(mass_list, radius_list)
+plt.plot(mass_list, radius_list)
 plt.xlabel("Cluster Mass")
 plt.ylabel("Cluster Radius")
 plt.title("Cluster Mass vs. Radius")
