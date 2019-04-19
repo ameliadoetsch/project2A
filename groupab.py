@@ -9,6 +9,7 @@ def in_radius(center_x, center_y, r, x, y):
     return math.hypot(center_x - x, center_y - y) <= r # root((center_x - x)^2 + (center_y - y)^2)
 
 
+# performs a random walk from a given point; returns the next (random) point
 def random_walk(point):
     x = point[0]
     y = point[1]
@@ -83,7 +84,7 @@ for simulation_num in range(1, 11): # perform 10 plots
             point = random_walk(point)
             x_new = point[0]
             y_new = point[1]
-            if np.sqrt((x_new - 100) ** 2 + (y_new - 100) ** 2) > 101:
+            if np.sqrt((x_new - 125) ** 2 + (y_new - 125) ** 2) > 101:
                 escape = True
                 lattice[x_new][y_new] = 0
                 break
@@ -132,7 +133,7 @@ for simulation_num in range(1, 11): # perform 10 plots
                 y.append(j)
 
     plt.scatter(x, y, label="Cluster Particles")
-    plt.xlabel("Ho-rizontal Position")
+    plt.xlabel("Horizontal Position")
     plt.ylabel("Vertical Position")
     plt.title("2D Cluster Growth Using the DLA Model")
     plt.legend()
