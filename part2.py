@@ -3,13 +3,13 @@ import random as random
 import matplotlib.pyplot as plt
 
 #parameter controls
-grid_size = 20     #Size of grid
-fish_breed = 8    #Fish breeding age
-shark_breed = 5   #Shark breeding age
-starve_age = 7    #Shark starvation age
-fish_start = 20   #Starting population of fish
-shark_start = 10  #Starting population of sharks
-n = 50           #Number of time steps
+grid_size = 50    #Size of grid
+fish_breed = 9   #Fish breeding age
+shark_breed = 10   #Shark breeding age
+starve_age = 11    #Shark starvation age
+fish_start = 1000   #Starting population of fish
+shark_start = 100   #Starting population of sharks
+n = 500           #Number of time steps
 
 
 #declare variables
