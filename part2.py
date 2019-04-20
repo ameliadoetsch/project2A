@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 #parameter controls
 grid_size = 50    #Size of grid
 fish_breed = 6    #Fish breeding age
-shark_breed = 10   #Shark breeding age
-starve_age = 9   #Shark starvation age
+shark_breed = 6   #Shark breeding age
+starve_age = 6   #Shark starvation age
 fish_start = 2000   #Starting population of fish
-shark_start = 500   #Starting population of sharks
+shark_start = 200   #Starting population of sharks
 n = 500           #Number of time steps
 
 
@@ -265,17 +265,17 @@ for t in time_steps:
                                 fish_positions[s_move_i][s_move_j] = -1
                                 shark_starve[s_move_i][s_move_j] = 0
                                 shark_starve[i][j] = -1
-    # if ((t % 25 == 0) and t < 300) or t == 0:
-    #     plt.figure(t)
-    #     plt.subplot(2,1,1)
-    #     plt.contourf(fish_positions)
-    #     plt.title("Fish Age Density")
-    #
-    #     plt.subplot(2,1,2)
-    #     plt.contourf(shark_positions)
-    #     plt.xlabel("Shark Age Density")
-    #
-    #     plt.show()
+    if ((t % 50 == 0) and t < 500) or t == 0:
+        plt.figure(t)
+        plt.subplot(2,1,1)
+        plt.contourf(fish_positions)
+        plt.title("Fish Age Density")
+
+        plt.subplot(2,1,2)
+        plt.contourf(shark_positions)
+        plt.xlabel("Shark Age Density")
+
+        plt.show()
 
 
 plt.plot(time_steps, fish_pop, label='Fish', color='r', ls='-')
