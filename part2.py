@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 
 #parameter controls
 grid_size = 50    #Size of grid
-fish_breed = 9   #Fish breeding age
+fish_breed = 6    #Fish breeding age
 shark_breed = 10   #Shark breeding age
-starve_age = 11    #Shark starvation age
-fish_start = 1000   #Starting population of fish
-shark_start = 100   #Starting population of sharks
+starve_age = 9   #Shark starvation age
+fish_start = 2000   #Starting population of fish
+shark_start = 500   #Starting population of sharks
 n = 500           #Number of time steps
 
 
@@ -16,7 +16,7 @@ n = 500           #Number of time steps
 fish_positions = [[-1 for j in range(grid_size)] for i in range(grid_size)]
 shark_positions = [[-1 for j in range(grid_size)] for i in range(grid_size)]
 shark_starve = [[-1 for j in range(grid_size)] for i in range(grid_size)]
-iter_array =  np.arange(0, grid_size, 1)
+iter_array = np.arange(0, grid_size, 1)
 time_steps = np.arange(0, n, 1)
 
 
@@ -104,7 +104,7 @@ def location_check_pick(twoD_array, max_size, x, y):
 def hunt_location_check_pick(twoD_array, max_size, x, y):
     direction = []
 
-    if (x == 0):
+    if (x == 0) and y != 0:
         if twoD_array[max_size-1][y] >= 0:
             direction.append('up')
     elif twoD_array[x-1][y] >= 0:
@@ -122,11 +122,12 @@ def hunt_location_check_pick(twoD_array, max_size, x, y):
     elif twoD_array[x+1][y] >= 0:
         direction.append('down')
 
-    if (y == 0):
+    if (y == 0) and x != 0:
         if twoD_array[x][max_size-1] >= 0:
             direction.append('left')
     elif twoD_array[x][y - 1] >= 0:
         direction.append('left')
+
 
     length = len(direction)
     if length > 1:
@@ -193,6 +194,7 @@ for t in time_steps:
     shark_move = [[0 for j in range(grid_size)] for i in range(grid_size)]
     for i in iter_array:
         for j in iter_array:
+
             # fish moving code
            if fish_positions[i][j] >= 0:
                if fish_move[i][j] == 0:
@@ -249,13 +251,31 @@ for t in time_steps:
                                     shark_starve[mv_shark_i][mv_shark_j] = shark_starve[i][j] + 1
                                     shark_starve[i][j] = -1
                         else:
-                            shark_positions[s_move_i][s_move_j] = shark_positions[i][j] + 1
-                            shark_positions[i][j] = -1
-                            shark_move[s_move_i][s_move_j] = 1
-                            fish_positions[s_move_i][s_move_j] = -1
-                            shark_starve[s_move_i][s_move_j] = 0
-                            shark_starve[i][j] = -1
-
+                            if shark_positions[i][j] == shark_breed:
+                                shark_positions[s_move_i][s_move_j] = 0
+                                shark_positions[i][j] = 0
+                                shark_move[s_move_i][s_move_j] = 1
+                                fish_positions[s_move_i][s_move_j] = -1
+                                shark_starve[s_move_i][s_move_j] = 0
+                                shark_starve[i][j] = -1
+                            else:
+                                shark_positions[s_move_i][s_move_j] = shark_positions[i][j] + 1
+                                shark_positions[i][j] = -1
+                                shark_move[s_move_i][s_move_j] = 1
+                                fish_positions[s_move_i][s_move_j] = -1
+                                shark_starve[s_move_i][s_move_j] = 0
+                                shark_starve[i][j] = -1
+    # if ((t % 25 == 0) and t < 300) or t == 0:
+    #     plt.figure(t)
+    #     plt.subplot(2,1,1)
+    #     plt.contourf(fish_positions)
+    #     plt.title("Fish Age Density")
+    #
+    #     plt.subplot(2,1,2)
+    #     plt.contourf(shark_positions)
+    #     plt.xlabel("Shark Age Density")
+    #
+    #     plt.show()
 
 
 plt.plot(time_steps, fish_pop, label='Fish', color='r', ls='-')
